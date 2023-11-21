@@ -50,10 +50,13 @@ def runquery(a):
     st.dataframe(df)
     st.success('query executed successfully')
 
-
+# @st.cache(allow_output_mutation=True, suppress_st_warning=True, max_entries=1, ttl=1)
 def placeorder(t, f_id, quantity):
     q = 'INSERT INTO bill VALUES ({},{},{})'.format(t, f_id, quantity)
     c.execute(q)
+    mydb.commit()
+    # Call update_inventory function
+    c.callproc('update_inventory_procedure', args=(f_id, quantity))
 
     # c.execute('SELECT update_inventory({},{})'.format())
     mydb.commit()
@@ -74,8 +77,8 @@ def generatebill(n):
 
 
 def showingredients(id):
-    q = 'SELECT ingredients.ingr_id, ingredients.ingr_name from ingredients JOIN recepie where ingredients.ingr_id = recepie.ingr_id AND f_id = ' + id
-    c.execute(q)
+    q = 'SELECT ingredients.ingr_id, ingredients.ingr_name FROM ingredients JOIN recepie WHERE ingredients.ingr_id = recepie.ingr_id AND f_id = %s'
+    c.execute(q, (id,))
     res = c.fetchall()
     return res
 

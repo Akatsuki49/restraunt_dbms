@@ -4,16 +4,6 @@ from create import *
 from home import *
 
 
-# mydb = mysql.connector.connect(
-#     host="localhost",
-#     user="root",
-#     password="password"
-# )
-# c = mydb.cursor()
-
-# c.execute("CREATE DATABASE ebike")
-
-
 def main():
     st.title("Restaurant Database Management System")
     menu = ["Home", "View", "Add", "Edit order", "Place Order", "Run Custom Query", "Generate bill", "View employees",
