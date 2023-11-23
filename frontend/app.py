@@ -14,10 +14,17 @@ def main():
         st.subheader("Database overview")
         Home()
 
-    if (choice == "View"):
+    if choice == "View":
         option = st.selectbox('Select table to view', ('chef', 'waiter', 'food_items', 'tables'))
         display(option)
-
+        if option == 'food_items':
+            st.subheader('View ingredients')
+            f_id = st.text_input('Enter food name')
+            if st.button('Show ingredients'):
+                res = showingredients(f_id)
+                df1 = pd.DataFrame(res)
+                st.dataframe(df1)
+                
     if choice == "Add":
         st.subheader("Add data to table")
         option = st.selectbox('Select table to view', ('chef', 'waiter', 'food_items', 'tables'))
@@ -40,11 +47,10 @@ def main():
     if choice == "Place Order":
         t_no = st.selectbox('Select table', ('1', '2', '3', '4', '5', '6', '7', '8'))
         display('food_items')
-        f = st.text_input('Enter food id', key=121)
+        f_name = st.text_input('Enter food name')
         q = st.text_input('Enter quantity', key=100)
-        if (st.button('Place order')):
-            placeorder(t_no, f, q)
-
+        if st.button('Place order'):
+            placeorder(t_no, f_name, q)
     if choice == "Run Custom Query":
         st.text('Enter the query in the box below')
         q = st.text_input('Enter query')
