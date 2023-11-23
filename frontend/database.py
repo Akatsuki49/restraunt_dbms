@@ -90,6 +90,22 @@ def placeorder(t, f_name, quantity):
                 (quantity, f_name, t))
             mydb.commit()
             st.success('Updated order successfully')
+
+            # Retrieve f_id for the food item
+            f_id_query = 'SELECT f_id FROM food_items WHERE f_name = %s'
+            c.execute(f_id_query, (f_name,))
+            f_id_result = c.fetchone()
+
+            if f_id_result:
+                f_id = f_id_result[0]
+
+                # Call the stored procedure to update inventory
+                c.callproc('update_inventory_procedure', args=(f_id, quantity))
+
+                mydb.commit()
+                st.success('Updated ingredient quantities successfully')
+            else:
+                st.error('Food item not found.')
     except mysql.connector.Error as err:
         st.error(f"MySQL Error: {err}")
 
